@@ -386,7 +386,7 @@ foreach ($courses as $course) {
                                                     <?php elseif ($record['status'] === 'late'): ?>
                                                         <span class="status-late px-3 py-1 rounded-full text-sm font-semibold">
                                                             ⏰ Late
-                                                        </span>
+                                                        </
                                                     <?php else: ?>
                                                         <span class="bg-gray-200 text-gray-600 px-3 py-1 rounded-full text-sm">
                                                             Not Marked
