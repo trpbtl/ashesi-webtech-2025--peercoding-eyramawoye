@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="assets/fontawesome/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body class="main">
+    <header>
+        <button id="open-sidebar" class="menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h3>Ashesi Attendance Management</h3>
+    </header>
+
+    <div id="overlay" class="overlay hidden"></div>
+    <aside id="sidebar" class="sidebar collapsed">
+        
+        <nav>
+            <ul>
+                <li><a href="#"><i class="fas fa-house"></i><span>Dashboard</span></a></li>
+                <li><a href="#"><i class="fas fa-book"></i><span>Courses</span></a></li>
+                <li><a href="#"><i class="fas fa-calendar-check"></i><span>Sessions</span></a></li>
+                <li><a href="#"><i class="fas fa-chart-line"></i><span>Reports</span></a></li>
+                <li><a href="#"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                <li class="logout"><a href="#"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+            </ul>
+
+        </nav>
+
+    </aside>
+
+    <main>
+        <h1>Dashboard</h1>
+        <div class="cards-container" id="cardsContainer"></div>
+
+    </main>
+
+
+    
+
+    <script src="dashboard.js"></script>
+</body>
+
+</html>

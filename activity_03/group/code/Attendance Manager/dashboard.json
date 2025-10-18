@@ -1,0 +1,50 @@
+[
+    {
+        "courseId": "CS100",
+        "courseName": "Introduction to Computing",
+        "instructor": "Stephane Nwolley",
+        "enrolled": "45",
+        "observers": "0",
+        "auditors": "1",
+        "semester": "Fall 2025",
+        "credits": "1",
+        "avgAttendance": "85%"
+    },
+
+    {
+         "courseId": "CS223",
+        "courseName": "Data Structures & Algorithms",
+        "instructor": "Govindha Yeluripati",
+        "enrolled": "50",
+        "observers": "2",
+        "auditors": "2",
+        "semester": "Spring 2025",
+        "credits": "1.5",
+        "avgAttendance": "90%"
+
+    },
+
+    {
+        "courseId": "CS254",
+        "courseName": "Introduction to Artificial Intelligence",
+        "instructor": "Dennis Owusu",
+        "enrolled": "38",
+        "observers": "0",
+        "auditors": "1",
+        "semester": "Spring 2025",
+        "credits": "2",
+        "avgAttendance": "88%"
+    },
+    
+    {
+        "courseId": "CS111",
+        "courseName": "Object Oriented Programming",
+        "instructor": "Ayorkor Korsah",
+        "enrolled": "41",
+        "observers": "0",
+        "auditors": "0",
+        "semester": "Fall 2024",
+        "credits": "2",
+        "avgAttendance": "95%"
+    }
+]
