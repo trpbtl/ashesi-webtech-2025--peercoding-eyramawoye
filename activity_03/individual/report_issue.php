@@ -20,6 +20,7 @@
 
 // Include config file
 require_once 'config.php';
+require_once 'helpers.php';
 
 // Must be logged in to report issues
 requireLogin();

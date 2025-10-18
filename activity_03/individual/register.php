@@ -14,6 +14,8 @@
  */
 
 require_once 'config.php';
+require_once 'helpers.php';
+
 
 // If already logged in, redirect to dashboard
 if (isLoggedIn()) {

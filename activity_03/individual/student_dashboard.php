@@ -20,6 +20,8 @@
 // Include config file
 // ============================================
 require_once 'config.php';
+require_once 'helpers.php';
+
 
 // ============================================
 // STEP 1: Check if user is logged in

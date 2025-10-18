@@ -25,6 +25,8 @@
 // This gives us access to the database connection ($pdo)
 // and helper functions we created
 require_once 'config.php';
+require_once 'helpers.php';
+
 
 // ============================================
 // STEP 2: Check if form was submitted with POST method
