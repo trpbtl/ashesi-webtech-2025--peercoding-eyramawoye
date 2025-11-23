@@ -1,31 +1,14 @@
 <?php
-/**
- * Login Page (Landing Page)
- * 
- * This is the main entry point of the application.
- * Users enter their credentials here to access the system.
- * 
- * Flow:
- * 1. Display login form
- * 2. User submits credentials
- * 3. login_handler.php validates credentials
- * 4. Redirect to appropriate dashboard based on role
- */
 
-// Include configuration and helper functions
 require_once 'config.php';
 require_once 'helpers.php';
 
-
-// If user is already logged in, redirect to dashboard
 if (isLoggedIn()) {
     redirectToDashboard();
 }
 
-// Get flash message if any (success/error messages)
 $flashMessage = getFlashMessage();
 
-// Generate CSRF token for form security
 $csrfToken = generateCSRFToken();
 ?>
 <!DOCTYPE html>
@@ -39,14 +22,12 @@ $csrfToken = generateCSRFToken();
 </head>
 <body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-gray-100">
     <div class="bg-white p-8 rounded-lg shadow-2xl w-full max-w-md">
-        
         <!-- Header -->
         <div class="text-center mb-8">
             <i class="fas fa-graduation-cap text-4xl text-red-600 mb-4"></i>
             <h1 class="text-2xl font-bold text-gray-800">Ashesi Attendance Manager</h1>
             <p class="text-gray-600 mt-2">Sign in to your account</p>
         </div>
-
         <!-- Flash Messages -->
         <?php if ($flashMessage): ?>
             <div class="mb-6 p-4 rounded-lg <?php echo $flashMessage['type'] === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'; ?>">
@@ -54,12 +35,10 @@ $csrfToken = generateCSRFToken();
                 <?php echo htmlspecialchars($flashMessage['message']); ?>
             </div>
         <?php endif; ?>
-
         <!-- Login Form -->
         <form action="login_handler.php" method="POST" class="space-y-6">
             <!-- CSRF Token -->
             <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
-            
             <!-- Email Field -->
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
@@ -74,7 +53,6 @@ $csrfToken = generateCSRFToken();
                     placeholder="your.email@ashesi.edu.gh"
                 >
             </div>
-
             <!-- Password Field -->
             <div>
                 <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
@@ -98,7 +76,6 @@ $csrfToken = generateCSRFToken();
                     </button>
                 </div>
             </div>
-
             <!-- Remember Me & Forgot Password -->
             <div class="flex items-center justify-between">
                 <label class="flex items-center">
@@ -107,7 +84,6 @@ $csrfToken = generateCSRFToken();
                 </label>
                 <a href="#" class="text-sm text-red-600 hover:text-red-700">Forgot password?</a>
             </div>
-
             <!-- Submit Button -->
             <button 
                 type="submit" 
@@ -115,7 +91,6 @@ $csrfToken = generateCSRFToken();
             >
                 <i class="fas fa-sign-in-alt mr-2"></i>Sign In
             </button>
-
             <!-- Register Link -->
             <div class="text-center mt-4">
                 <p class="text-gray-600">
@@ -125,14 +100,12 @@ $csrfToken = generateCSRFToken();
             </div>
         </form>
     </div>
-
     <!-- JavaScript -->
     <script>
-        // Password toggle
+
         document.getElementById('togglePassword').addEventListener('click', function() {
             const passwordInput = document.getElementById('password');
             const icon = this.querySelector('i');
-            
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 icon.classList.remove('fa-eye-slash');
@@ -144,18 +117,15 @@ $csrfToken = generateCSRFToken();
             }
         });
 
-        // Form validation
         document.querySelector('form').addEventListener('submit', function(e) {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-
             if (!email || !password) {
                 e.preventDefault();
                 alert('Please fill in all fields');
                 return false;
             }
 
-            // Basic email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 e.preventDefault();
@@ -165,4 +135,4 @@ $csrfToken = generateCSRFToken();
         });
     </script>
 </body>
-</html>
+</html>

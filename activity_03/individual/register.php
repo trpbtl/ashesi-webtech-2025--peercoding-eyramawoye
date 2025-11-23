@@ -1,32 +1,14 @@
 <?php
-/**
- * Registration Page
- * 
- * Allows new users to create an account.
- * Collects: name, email, password, role, and Ashesi ID
- * 
- * Flow:
- * 1. Display registration form
- * 2. User fills in details
- * 3. Form submits to register_handler.php
- * 4. Handler validates and creates account
- * 5. User redirected to login page
- */
-
 require_once 'config.php';
 require_once 'helpers.php';
 
-
-// If already logged in, redirect to dashboard
 if (isLoggedIn()) {
     redirectToDashboard();
 }
 
-// Get flash messages and CSRF token
 $flashMessage = getFlashMessage();
 $csrfToken = generateCSRFToken();
 
-// Preserve form data if validation fails (from URL parameters)
 $formData = [
     'name' => isset($_GET['name']) ? htmlspecialchars($_GET['name']) : '',
     'email' => isset($_GET['email']) ? htmlspecialchars($_GET['email']) : '',
@@ -45,14 +27,12 @@ $formData = [
 </head>
 <body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-gray-100 py-8">
     <div class="bg-white p-8 rounded-lg shadow-2xl w-full max-w-md">
-        
         <!-- Header -->
         <div class="text-center mb-8">
             <i class="fas fa-user-plus text-5xl text-red-600 mb-4"></i>
             <h1 class="text-3xl font-bold text-gray-800">Create Account</h1>
             <p class="text-gray-600 mt-2">Join Ashesi Attendance Manager</p>
         </div>
-
         <!-- Flash Messages -->
         <?php if ($flashMessage): ?>
             <div class="mb-6 p-4 rounded-lg <?php echo $flashMessage['type'] === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'; ?>">
@@ -60,7 +40,6 @@ $formData = [
                 <?php echo htmlspecialchars($flashMessage['message']); ?>
             </div>
         <?php endif; ?>
-
         <!-- Error Messages from URL -->
         <?php if (isset($_GET['error'])): ?>
             <div class="mb-6 p-4 rounded-lg bg-red-100 text-red-800">
@@ -78,13 +57,10 @@ $formData = [
                 ?>
             </div>
         <?php endif; ?>
-
         <!-- Registration Form -->
         <form action="register_handler.php" method="POST" class="space-y-6" id="registerForm">
-            
             <!-- CSRF Token -->
             <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
-            
             <!-- Full Name -->
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
@@ -101,7 +77,6 @@ $formData = [
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 >
             </div>
-
             <!-- Email -->
             <div>
                 <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
@@ -119,7 +94,6 @@ $formData = [
                 >
                 <p class="text-xs text-gray-500 mt-1">Use your Ashesi email address</p>
             </div>
-
             <!-- Password -->
             <div>
                 <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
@@ -145,7 +119,6 @@ $formData = [
                 </div>
                 <p class="text-xs text-gray-500 mt-1">At least 8 characters with uppercase, lowercase, and numbers</p>
             </div>
-
             <!-- Confirm Password -->
             <div>
                 <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-2">
@@ -161,7 +134,6 @@ $formData = [
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 >
             </div>
-
             <!-- Role Selection -->
             <div>
                 <label for="role" class="block text-sm font-medium text-gray-700 mb-2">
@@ -178,7 +150,6 @@ $formData = [
                     <option value="faculty" <?php echo $formData['role'] === 'faculty' ? 'selected' : ''; ?>>Faculty</option>
                 </select>
             </div>
-
             <!-- Ashesi ID -->
             <div>
                 <label for="ashesi_id" class="block text-sm font-medium text-gray-700 mb-2">
@@ -195,7 +166,6 @@ $formData = [
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                 >
             </div>
-
             <!-- Submit Button -->
             <button 
                 type="submit" 
@@ -204,7 +174,6 @@ $formData = [
                 <i class="fas fa-user-plus mr-2"></i>
                 Create Account
             </button>
-
             <!-- Login Link -->
             <div class="text-center mt-6">
                 <p class="text-gray-600">
@@ -216,14 +185,12 @@ $formData = [
             </div>
         </form>
     </div>
-
     <!-- JavaScript -->
     <script>
-        // Toggle password visibility
+
         document.getElementById('togglePassword').addEventListener('click', function() {
             const passwordInput = document.getElementById('password');
             const icon = this.querySelector('i');
-            
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 icon.classList.remove('fa-eye-slash');
@@ -235,30 +202,25 @@ $formData = [
             }
         });
 
-        // Form validation
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm_password').value;
-            
-            // Check if passwords match
+
             if (password !== confirmPassword) {
                 e.preventDefault();
                 alert('Passwords do not match!');
                 return false;
             }
 
-            // Password strength validation
             if (password.length < 8) {
                 e.preventDefault();
                 alert('Password must be at least 8 characters long!');
                 return false;
             }
 
-            // Check for uppercase, lowercase, and numbers
             const hasUpperCase = /[A-Z]/.test(password);
             const hasLowerCase = /[a-z]/.test(password);
             const hasNumbers = /\d/.test(password);
-            
             if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
                 e.preventDefault();
                 alert('Password must contain uppercase, lowercase, and numbers!');
@@ -267,4 +229,4 @@ $formData = [
         });
     </script>
 </body>
-</html>
+</html>

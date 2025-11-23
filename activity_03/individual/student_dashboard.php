@@ -1,72 +1,48 @@
 <?php
-/**
- * ============================================
- * STUDENT DASHBOARD - BEGINNER FRIENDLY
- * ============================================
- * 
- * WHAT THIS PAGE DOES:
- * This is the main page students see after login.
- * It shows:
- * 1. Welcome message with student's name
- * 2. List of all courses they're enrolled in
- * 3. Their attendance records for each course
- * 4. Visual distinction between lectures and labs
- * 5. Attendance statistics (present/absent/late counts)
- * 
- * ONLY STUDENTS CAN ACCESS THIS PAGE
- */
 
-// ============================================
-// Include config file
-// ============================================
+
+
 require_once 'config.php';
 require_once 'helpers.php';
 
 
-// ============================================
-// STEP 1: Check if user is logged in
-// ============================================
-// If not logged in, redirect to login page
+
+
 requireLogin();
 
-// ============================================
-// STEP 2: Check if user is a student
-// ============================================
-// Only students should access this page
+
+
+
 if (!hasRole('student')) {
-    // If faculty tries to access, redirect to faculty dashboard
+
     if (hasRole('faculty')) {
         header("Location: faculty_dashboard.php");
         exit();
     }
-    // Otherwise, redirect to login
+
     header("Location: index.php");
     exit();
 }
 
-// ============================================
-// STEP 3: Get student information from session
-// ============================================
-// Remember: We stored this data in login_handler.php
+
+
+
 $studentId = $_SESSION['user_id'];        // Student's database ID
 $studentName = $_SESSION['name'];         // Student's full name
 $studentEmail = $_SESSION['email'];       // Student's email
 $ashesiId = $_SESSION['ashesi_id'];       // Student's Ashesi ID
 
-// ============================================
-// STEP 4: Get flash message (if any)
-// ============================================
+
+
 $flashMessage = getFlashMessage();
 
-// ============================================
-// STEP 5: Get all courses the student is enrolled in
-// ============================================
+
+
 try {
-    // This SQL query joins multiple tables:
-    // - enrollments: links students to courses
-    // - courses: has course details
-    // - users: has faculty information
-    
+
+
+
+
     $courseQuery = $pdo->prepare("
         SELECT 
             c.course_id,
@@ -82,30 +58,24 @@ try {
         AND e.status = 'active'
         ORDER BY c.course_code
     ");
-    
-    // Bind the student ID
+
     $courseQuery->bindParam(':student_id', $studentId, PDO::PARAM_INT);
-    
-    // Execute the query
+
     $courseQuery->execute();
-    
-    // Fetch all courses as an array
-    // Each item in the array is a course
+
+
     $courses = $courseQuery->fetchAll();
-    
 } catch (PDOException $e) {
-    // If database error, log it
+
     error_log("Error fetching courses: " . $e->getMessage());
-    $courses = []; // Empty array if error
+    $courses = [];
 }
 
-// ============================================
-// STEP 6: Get attendance records for each course
-// ============================================
-$attendanceData = []; // This will store all attendance records
 
+
+$attendanceData = [];
 foreach ($courses as $course) {
-    // For each course, get all sessions and attendance
+
     try {
         $attendanceQuery = $pdo->prepare("
             SELECT 
@@ -122,35 +92,28 @@ foreach ($courses as $course) {
             WHERE s.course_id = :course_id
             ORDER BY s.session_date DESC, s.session_time DESC
         ");
-        
         $attendanceQuery->bindParam(':student_id', $studentId, PDO::PARAM_INT);
         $attendanceQuery->bindParam(':course_id', $course['course_id'], PDO::PARAM_INT);
         $attendanceQuery->execute();
-        
-        // Store attendance records for this course
+
         $attendanceData[$course['course_id']] = $attendanceQuery->fetchAll();
-        
     } catch (PDOException $e) {
         error_log("Error fetching attendance: " . $e->getMessage());
         $attendanceData[$course['course_id']] = [];
     }
 }
 
-// ============================================
-// STEP 7: Calculate attendance statistics for each course
-// ============================================
-$statistics = [];
 
+
+$statistics = [];
 foreach ($courses as $course) {
     $courseId = $course['course_id'];
     $records = $attendanceData[$courseId];
-    
-    // Count different attendance statuses
+
     $present = 0;
     $absent = 0;
     $late = 0;
     $total = count($records);
-    
     foreach ($records as $record) {
         if ($record['status'] === 'present') {
             $present++;
@@ -160,12 +123,10 @@ foreach ($courses as $course) {
             $late++;
         }
     }
-    
-    // Calculate percentage
-    // Avoid division by zero
+
+
     $percentage = $total > 0 ? round(($present / $total) * 100, 1) : 0;
-    
-    // Store statistics
+
     $statistics[$courseId] = [
         'present' => $present,
         'absent' => $absent,
@@ -174,7 +135,6 @@ foreach ($courses as $course) {
         'percentage' => $percentage
     ];
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -185,7 +145,6 @@ foreach ($courses as $course) {
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Custom styles for better visuals */
         .lecture-badge {
             background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
         }
@@ -207,7 +166,6 @@ foreach ($courses as $course) {
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
-    
     <!-- ============================================ -->
     <!-- NAVIGATION BAR -->
     <!-- ============================================ -->
@@ -222,7 +180,6 @@ foreach ($courses as $course) {
                         <p class="text-sm opacity-90">Student Dashboard</p>
                     </div>
                 </div>
-                
                 <!-- Right side: User info and logout -->
                 <div class="flex items-center space-x-4">
                     <div class="text-right">
@@ -236,12 +193,10 @@ foreach ($courses as $course) {
             </div>
         </div>
     </nav>
-
     <!-- ============================================ -->
     <!-- MAIN CONTENT -->
     <!-- ============================================ -->
     <div class="container mx-auto px-4 py-8">
-        
         <!-- Welcome message -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-8">
             <h2 class="text-2xl font-bold text-gray-800 mb-2">
@@ -249,7 +204,6 @@ foreach ($courses as $course) {
             </h2>
             <p class="text-gray-600">Here's your attendance overview for all courses</p>
         </div>
-
         <!-- Flash message -->
         <?php if ($flashMessage): ?>
             <div class="mb-6 p-4 rounded-lg <?php echo $flashMessage['type'] === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'; ?>">
@@ -257,7 +211,6 @@ foreach ($courses as $course) {
                 <?php echo htmlspecialchars($flashMessage['message']); ?>
             </div>
         <?php endif; ?>
-
         <!-- Report Issue Button -->
         <div class="mb-6">
             <a href="report_issue.php" class="inline-block bg-yellow-500 text-white px-6 py-3 rounded-lg hover:bg-yellow-600 transition duration-200">
@@ -265,11 +218,9 @@ foreach ($courses as $course) {
                 Report Attendance Issue
             </a>
         </div>
-
         <!-- ============================================ -->
         <!-- COURSES AND ATTENDANCE RECORDS -->
         <!-- ============================================ -->
-        
         <?php if (empty($courses)): ?>
             <!-- No courses enrolled -->
             <div class="bg-white rounded-lg shadow-md p-8 text-center">
@@ -285,7 +236,6 @@ foreach ($courses as $course) {
                     $stats = $statistics[$courseId];
                     $records = $attendanceData[$courseId];
                 ?>
-                
                 <div class="bg-white rounded-lg shadow-md mb-6 overflow-hidden">
                     <!-- Course header -->
                     <div class="bg-gradient-to-r from-red-600 to-red-700 text-white p-6">
@@ -300,14 +250,12 @@ foreach ($courses as $course) {
                                     <?php echo htmlspecialchars($course['faculty_name'] ?? 'No instructor assigned'); ?>
                                 </p>
                             </div>
-                            
                             <!-- Attendance statistics -->
                             <div class="text-right">
                                 <div class="text-4xl font-bold"><?php echo $stats['percentage']; ?>%</div>
                                 <div class="text-sm opacity-90">Attendance Rate</div>
                             </div>
                         </div>
-                        
                         <!-- Statistics cards -->
                         <div class="grid grid-cols-4 gap-4 mt-6">
                             <div class="bg-white bg-opacity-20 rounded-lg p-3 text-center">
@@ -328,7 +276,6 @@ foreach ($courses as $course) {
                             </div>
                         </div>
                     </div>
-                    
                     <!-- Attendance records table -->
                     <div class="p-6">
                         <?php if (empty($records)): ?>
@@ -353,13 +300,11 @@ foreach ($courses as $course) {
                                                     <i class="fas fa-calendar mr-2 text-gray-400"></i>
                                                     <?php echo date('M d, Y', strtotime($record['session_date'])); ?>
                                                 </td>
-                                                
                                                 <!-- Time -->
                                                 <td class="py-3 px-4">
                                                     <i class="fas fa-clock mr-2 text-gray-400"></i>
                                                     <?php echo $record['session_time'] ? date('g:i A', strtotime($record['session_time'])) : 'N/A'; ?>
                                                 </td>
-                                                
                                                 <!-- Session Type (Lecture/Lab/Practical) -->
                                                 <td class="py-3 px-4">
                                                     <?php if ($record['session_type'] === 'lecture'): ?>
@@ -372,7 +317,6 @@ foreach ($courses as $course) {
                                                         </span>
                                                     <?php endif; ?>
                                                 </td>
-                                                
                                                 <!-- Attendance Status -->
                                                 <td class="py-3 px-4">
                                                     <?php if ($record['status'] === 'present'): ?>
@@ -393,7 +337,6 @@ foreach ($courses as $course) {
                                                         </span>
                                                     <?php endif; ?>
                                                 </td>
-                                                
                                                 <!-- Notes -->
                                                 <td class="py-3 px-4 text-sm text-gray-600">
                                                     <?php echo $record['notes'] ? htmlspecialchars($record['notes']) : '-'; ?>
@@ -409,11 +352,9 @@ foreach ($courses as $course) {
             <?php endforeach; ?>
         <?php endif; ?>
     </div>
-
     <!-- Footer -->
     <footer class="bg-gray-800 text-white text-center py-6 mt-12">
         <p>&copy; 2025 Ashesi University - Attendance Management System</p>
     </footer>
-
 </body>
-</html>
+</html>

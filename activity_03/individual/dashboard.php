@@ -1,49 +1,28 @@
 <?php
-/**
- * Main Dashboard Page
- * 
- * This page displays different content based on user role:
- * - Students: View attendance history, statistics, report issues
- * - Faculty: View courses, sessions, mark attendance
- * - Admin: System overview and management
- * 
- * Flow:
- * 1. Check if user is logged in
- * 2. Get user role from session
- * 3. Display role-specific dashboard content
- */
-
 require_once 'config.php';
 require_once 'helpers.php';
 
-// Check if user is logged in, if not redirect to login
 if (!isLoggedIn()) {
     header('Location: index.php?error=login_required');
     exit();
 }
 
-// Get user information from session
 $userId = $_SESSION['user_id'];
 $userRole = $_SESSION['role'];
 $userName = $_SESSION['name'];
 $userEmail = $_SESSION['email'];
 
-// Get flash message if any
 $flashMessage = getFlashMessage();
 
-// Connect to database
 $pdo = getDatabaseConnection();
 
-// Initialize variables for dashboard data
 $courses = [];
 $attendanceStats = [];
 $recentSessions = [];
 
-// Fetch data based on user role
 if ($userRole === 'student') {
-    // STUDENT DASHBOARD DATA
-    
-    // Get enrolled courses
+
+
     $stmt = $pdo->prepare("
         SELECT c.course_id, c.course_code, c.course_name, c.semester, c.year,
                u.name as faculty_name
@@ -55,8 +34,7 @@ if ($userRole === 'student') {
     ");
     $stmt->execute(['student_id' => $userId]);
     $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Get attendance statistics for each course
+
     foreach ($courses as &$course) {
         $stmt = $pdo->prepare("
             SELECT 
@@ -73,14 +51,12 @@ if ($userRole === 'student') {
             'course_id' => $course['course_id']
         ]);
         $stats = $stmt->fetch(PDO::FETCH_ASSOC);
-        
         $course['stats'] = $stats;
         $course['attendance_percentage'] = $stats['total_sessions'] > 0 
             ? round(($stats['present_count'] / $stats['total_sessions']) * 100, 1) 
             : 0;
     }
-    
-    // Get recent attendance records (last 10)
+
     $stmt = $pdo->prepare("
         SELECT s.session_date, s.session_time, s.session_type, s.notes,
                c.course_code, c.course_name,
@@ -94,11 +70,9 @@ if ($userRole === 'student') {
     ");
     $stmt->execute(['student_id' => $userId]);
     $recentSessions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
 } elseif ($userRole === 'faculty') {
-    // FACULTY DASHBOARD DATA
-    
-    // Get courses taught by this faculty
+
+
     $stmt = $pdo->prepare("
         SELECT course_id, course_code, course_name, semester, year, description
         FROM courses
@@ -107,8 +81,7 @@ if ($userRole === 'student') {
     ");
     $stmt->execute(['faculty_id' => $userId]);
     $courses = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Get recent sessions for faculty courses
+
     $stmt = $pdo->prepare("
         SELECT s.session_id, s.session_date, s.session_time, s.session_type, s.notes,
                c.course_code, c.course_name,
@@ -127,7 +100,6 @@ if ($userRole === 'student') {
     $recentSessions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Helper function to get status badge color
 function getStatusBadge($status) {
     $badges = [
         'present' => '<span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800"><i class="fas fa-check-circle mr-1"></i>Present</span>',
@@ -137,7 +109,6 @@ function getStatusBadge($status) {
     return $badges[$status] ?? '<span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-800">Unknown</span>';
 }
 
-// Helper function to get session type badge
 function getSessionTypeBadge($type) {
     $badges = [
         'lecture' => '<span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-800"><i class="fas fa-book mr-1"></i>Lecture</span>',
@@ -156,7 +127,6 @@ function getSessionTypeBadge($type) {
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Custom animations and transitions */
         .card-hover {
             transition: all 0.3s ease;
         }
@@ -174,7 +144,6 @@ function getSessionTypeBadge($type) {
     </style>
 </head>
 <body class="bg-gradient-to-br from-red-50 to-gray-100 min-h-screen">
-    
     <!-- Navigation Bar -->
     <nav class="bg-white shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -187,7 +156,6 @@ function getSessionTypeBadge($type) {
                         <p class="text-xs text-gray-600"><?php echo ucfirst($userRole); ?> Portal</p>
                     </div>
                 </div>
-                
                 <!-- User Info and Logout -->
                 <div class="flex items-center space-x-4">
                     <div class="text-right hidden sm:block">
@@ -201,10 +169,8 @@ function getSessionTypeBadge($type) {
             </div>
         </div>
     </nav>
-
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
         <!-- Flash Message -->
         <?php if ($flashMessage): ?>
             <div class="mb-6 p-4 rounded-lg fade-in <?php echo $flashMessage['type'] === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'; ?>">
@@ -212,7 +178,6 @@ function getSessionTypeBadge($type) {
                 <?php echo htmlspecialchars($flashMessage['message']); ?>
             </div>
         <?php endif; ?>
-
         <!-- Welcome Section -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-8 fade-in">
             <div class="flex items-center justify-between">
@@ -233,10 +198,8 @@ function getSessionTypeBadge($type) {
                 <i class="fas fa-user-circle text-6xl text-red-600 hidden md:block"></i>
             </div>
         </div>
-
         <?php if ($userRole === 'student'): ?>
             <!-- STUDENT DASHBOARD -->
-            
             <!-- Course Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 <?php foreach ($courses as $course): ?>
@@ -246,7 +209,6 @@ function getSessionTypeBadge($type) {
                             <i class="fas fa-book text-3xl text-red-600"></i>
                         </div>
                         <p class="text-gray-600 mb-4"><?php echo htmlspecialchars($course['course_name']); ?></p>
-                        
                         <!-- Attendance Percentage -->
                         <div class="mb-4">
                             <div class="flex justify-between items-center mb-2">
@@ -260,7 +222,6 @@ function getSessionTypeBadge($type) {
                                      style="width: <?php echo $course['attendance_percentage']; ?>%"></div>
                             </div>
                         </div>
-                        
                         <!-- Stats -->
                         <div class="grid grid-cols-3 gap-2 text-center text-sm">
                             <div class="bg-green-50 rounded p-2">
@@ -276,14 +237,12 @@ function getSessionTypeBadge($type) {
                                 <p class="text-xs text-gray-600">Late</p>
                             </div>
                         </div>
-                        
                         <p class="text-xs text-gray-500 mt-4">
                             <i class="fas fa-user mr-1"></i>
                             Instructor: <?php echo htmlspecialchars($course['faculty_name'] ?? 'TBA'); ?>
                         </p>
                     </div>
                 <?php endforeach; ?>
-                
                 <?php if (empty($courses)): ?>
                     <div class="col-span-full bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
                         <i class="fas fa-info-circle text-4xl text-yellow-600 mb-3"></i>
@@ -291,7 +250,6 @@ function getSessionTypeBadge($type) {
                     </div>
                 <?php endif; ?>
             </div>
-
             <!-- Recent Attendance -->
             <div class="bg-white rounded-lg shadow-lg p-6 mb-8 fade-in">
                 <div class="flex items-center justify-between mb-6">
@@ -300,7 +258,6 @@ function getSessionTypeBadge($type) {
                         Recent Attendance
                     </h3>
                 </div>
-                
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead class="bg-gray-50">
@@ -333,7 +290,6 @@ function getSessionTypeBadge($type) {
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
-                            
                             <?php if (empty($recentSessions)): ?>
                                 <tr>
                                     <td colspan="5" class="px-4 py-8 text-center text-gray-500">
@@ -346,7 +302,6 @@ function getSessionTypeBadge($type) {
                     </table>
                 </div>
             </div>
-
             <!-- Action Button -->
             <div class="text-center">
                 <a href="report_issue.php" class="inline-block bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 transition duration-200 font-semibold shadow-lg">
@@ -354,10 +309,8 @@ function getSessionTypeBadge($type) {
                     Report Attendance Issue
                 </a>
             </div>
-
         <?php elseif ($userRole === 'faculty'): ?>
             <!-- FACULTY DASHBOARD -->
-            
             <!-- Course Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
                 <?php foreach ($courses as $course): ?>
@@ -378,7 +331,6 @@ function getSessionTypeBadge($type) {
                         </div>
                     </div>
                 <?php endforeach; ?>
-                
                 <?php if (empty($courses)): ?>
                     <div class="col-span-full bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
                         <i class="fas fa-info-circle text-4xl text-yellow-600 mb-3"></i>
@@ -386,14 +338,12 @@ function getSessionTypeBadge($type) {
                     </div>
                 <?php endif; ?>
             </div>
-
             <!-- Recent Sessions -->
             <div class="bg-white rounded-lg shadow-lg p-6 fade-in">
                 <h3 class="text-2xl font-bold text-gray-800 mb-6">
                     <i class="fas fa-calendar-alt text-red-600 mr-2"></i>
                     Recent Sessions
                 </h3>
-                
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead class="bg-gray-50">
@@ -429,7 +379,6 @@ function getSessionTypeBadge($type) {
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
-                            
                             <?php if (empty($recentSessions)): ?>
                                 <tr>
                                     <td colspan="5" class="px-4 py-8 text-center text-gray-500">
@@ -442,11 +391,8 @@ function getSessionTypeBadge($type) {
                     </table>
                 </div>
             </div>
-
         <?php endif; ?>
-
     </main>
-
     <!-- Footer -->
     <footer class="bg-white shadow-lg mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -456,6 +402,5 @@ function getSessionTypeBadge($type) {
             </div>
         </div>
     </footer>
-
 </body>
 </html>
