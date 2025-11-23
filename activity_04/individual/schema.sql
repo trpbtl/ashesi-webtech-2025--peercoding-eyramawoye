@@ -1,9 +1,5 @@
--- Enhanced Database Schema for Activity 04
--- Course Management System with Request Approval
-
 USE webtech_2025A_eyram_awoye;
 
--- Users table
 CREATE TABLE IF NOT EXISTS users (
     user_id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
@@ -18,7 +14,6 @@ CREATE TABLE IF NOT EXISTS users (
     INDEX idx_role (role)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Courses table
 CREATE TABLE IF NOT EXISTS courses (
     course_id INT PRIMARY KEY AUTO_INCREMENT,
     course_code VARCHAR(20) UNIQUE NOT NULL,
@@ -33,7 +28,6 @@ CREATE TABLE IF NOT EXISTS courses (
     INDEX idx_faculty (faculty_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Course Requests table (NEW - for student join requests)
 CREATE TABLE IF NOT EXISTS course_requests (
     request_id INT PRIMARY KEY AUTO_INCREMENT,
     student_id INT NOT NULL,
@@ -52,7 +46,6 @@ CREATE TABLE IF NOT EXISTS course_requests (
     UNIQUE KEY unique_active_request (student_id, course_id, status)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Enrollments table
 CREATE TABLE IF NOT EXISTS enrollments (
     enrollment_id INT PRIMARY KEY AUTO_INCREMENT,
     student_id INT NOT NULL,
@@ -66,7 +59,6 @@ CREATE TABLE IF NOT EXISTS enrollments (
     INDEX idx_course_students (course_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Insert sample users (password: Password123!)
 INSERT INTO users (name, email, password, role, ashesi_id) VALUES
 ('John Doe', 'john.doe@ashesi.edu.gh', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'student', '2026001'),
 ('Alice Johnson', 'alice.johnson@ashesi.edu.gh', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'student', '2026002'),
@@ -75,7 +67,6 @@ INSERT INTO users (name, email, password, role, ashesi_id) VALUES
 ('Prof. Michael Brown', 'michael.brown@ashesi.edu.gh', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'faculty', 'FAC002')
 ON DUPLICATE KEY UPDATE name=name;
 
--- Insert sample courses
 INSERT INTO courses (course_code, course_name, faculty_id, semester, year, description) VALUES
 ('CS101', 'Introduction to Computer Science', 4, 'Fall', 2025, 'Fundamentals of programming and problem-solving'),
 ('CS201', 'Data Structures and Algorithms', 4, 'Spring', 2025, 'Study of common data structures and algorithms'),

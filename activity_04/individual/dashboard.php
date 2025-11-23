@@ -13,9 +13,6 @@ $flashMessage = getFlashMessage();
 $pdo = getDatabaseConnection();
 
 if ($userRole === 'student') {
-    // STUDENT DASHBOARD
-    
-    // Get enrolled courses
     $stmt = $pdo->prepare("
         SELECT c.course_id, c.course_code, c.course_name, c.semester, c.year,
                u.name as faculty_name
@@ -28,15 +25,11 @@ if ($userRole === 'student') {
     $stmt->execute(['student_id' => $userId]);
     $enrolledCourses = $stmt->fetchAll();
     
-    // Get pending requests count
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM course_requests WHERE student_id = :student_id AND status = 'pending'");
     $stmt->execute(['student_id' => $userId]);
     $pendingRequestsCount = $stmt->fetchColumn();
     
 } elseif ($userRole === 'faculty') {
-    // FACULTY DASHBOARD
-    
-    // Get faculty courses
     $stmt = $pdo->prepare("
         SELECT c.course_id, c.course_code, c.course_name, c.semester, c.year, c.description,
                COUNT(DISTINCT e.student_id) as enrolled_count
@@ -49,7 +42,6 @@ if ($userRole === 'student') {
     $stmt->execute(['faculty_id' => $userId]);
     $facultyCourses = $stmt->fetchAll();
     
-    // Get pending requests count
     $stmt = $pdo->prepare("
         SELECT COUNT(*) 
         FROM course_requests cr

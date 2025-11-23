@@ -24,7 +24,6 @@ if (empty($requestId) || !in_array($action, ['approve', 'reject'])) {
 try {
     $pdo = getDatabaseConnection();
     
-    // Verify the request belongs to faculty's course
     $stmt = $pdo->prepare("
         SELECT cr.student_id, cr.course_id, c.course_code, c.course_name, u.name as student_name
         FROM course_requests cr
@@ -42,7 +41,6 @@ try {
     $pdo->beginTransaction();
     
     if ($action === 'approve') {
-        // Update request status
         $stmt = $pdo->prepare("
             UPDATE course_requests 
             SET status = 'approved', reviewed_at = NOW(), reviewed_by = :faculty_id, comments = :comments
@@ -54,7 +52,6 @@ try {
             'request_id' => $requestId
         ]);
         
-        // Add to enrollments
         $stmt = $pdo->prepare("
             INSERT INTO enrollments (student_id, course_id, status, enrollment_date) 
             VALUES (:student_id, :course_id, 'active', CURDATE())
@@ -71,7 +68,6 @@ try {
         redirect('manage_requests.php', $message, 'success');
         
     } else if ($action === 'reject') {
-        // Update request status
         $stmt = $pdo->prepare("
             UPDATE course_requests 
             SET status = 'rejected', reviewed_at = NOW(), reviewed_by = :faculty_id, comments = :comments

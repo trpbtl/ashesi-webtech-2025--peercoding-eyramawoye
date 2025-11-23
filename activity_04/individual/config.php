@@ -1,23 +1,14 @@
 <?php
-/**
- * Configuration File
- * Database connection and session management
- */
 
-// Start session at the very beginning
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Database credentials
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'webtech_2025A_eyram_awoye');
-define('DB_USER', 'root');  // Default XAMPP user
-define('DB_PASS', '');  // Default XAMPP password (empty)
+define('DB_USER', 'root');
+define('DB_PASS', '');
 
-/**
- * Get Database Connection using PDO
- */
 function getDatabaseConnection() {
     try {
         $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4";

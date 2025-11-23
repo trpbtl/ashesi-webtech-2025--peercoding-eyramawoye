@@ -78,7 +78,6 @@ try {
     exit();
     
 } catch (PDOException $e) {
-    error_log("Registration error: " . $e->getMessage());
     header("Location: register.php?error=system_error");
     exit();
 }

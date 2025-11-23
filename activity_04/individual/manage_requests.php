@@ -10,7 +10,6 @@ $userName = $_SESSION['name'];
 
 $pdo = getDatabaseConnection();
 
-// Get all pending requests for faculty's courses
 $stmt = $pdo->prepare("
     SELECT cr.request_id, cr.requested_at, cr.status,
            c.course_id, c.course_code, c.course_name,
@@ -24,7 +23,6 @@ $stmt = $pdo->prepare("
 $stmt->execute(['faculty_id' => $facultyId]);
 $pendingRequests = $stmt->fetchAll();
 
-// Group requests by course
 $requestsByCourse = [];
 foreach ($pendingRequests as $request) {
     $courseKey = $request['course_id'];
@@ -38,7 +36,6 @@ foreach ($pendingRequests as $request) {
     $requestsByCourse[$courseKey]['requests'][] = $request;
 }
 
-// Get recently processed requests (last 10)
 $stmt = $pdo->prepare("
     SELECT cr.request_id, cr.requested_at, cr.reviewed_at, cr.status, cr.comments,
            c.course_code, c.course_name,

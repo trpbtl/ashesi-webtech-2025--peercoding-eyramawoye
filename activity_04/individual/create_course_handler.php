@@ -19,22 +19,18 @@ $year = intval($_POST['year'] ?? 0);
 $description = sanitizeInput($_POST['description'] ?? '');
 $facultyId = $_SESSION['user_id'];
 
-// Validation
 if (empty($courseCode) || empty($courseName) || empty($semester) || empty($year)) {
     redirect('create_course.php', 'Please fill in all required fields', 'error');
 }
 
-// Validate course code format
 if (!preg_match('/^[A-Z]{2,4}[0-9]{3}$/', $courseCode)) {
     redirect('create_course.php', 'Invalid course code format. Use format like CS101', 'error');
 }
 
-// Validate year
 if ($year < 2024 || $year > 2030) {
     redirect('create_course.php', 'Invalid year', 'error');
 }
 
-// Validate semester
 $validSemesters = ['Fall', 'Spring', 'Summer'];
 if (!in_array($semester, $validSemesters)) {
     redirect('create_course.php', 'Invalid semester', 'error');
@@ -43,7 +39,6 @@ if (!in_array($semester, $validSemesters)) {
 try {
     $pdo = getDatabaseConnection();
     
-    // Check if course code already exists
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM courses WHERE course_code = :course_code");
     $stmt->execute(['course_code' => $courseCode]);
     
@@ -51,7 +46,6 @@ try {
         redirect('create_course.php', 'Course code already exists. Please use a different code.', 'error');
     }
     
-    // Insert new course
     $stmt = $pdo->prepare("
         INSERT INTO courses (course_code, course_name, faculty_id, semester, year, description) 
         VALUES (:course_code, :course_name, :faculty_id, :semester, :year, :description)

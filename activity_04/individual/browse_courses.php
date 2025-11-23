@@ -10,7 +10,6 @@ $userName = $_SESSION['name'];
 
 $pdo = getDatabaseConnection();
 
-// Get courses the student is NOT enrolled in and has NOT requested
 $stmt = $pdo->prepare("
     SELECT c.course_id, c.course_code, c.course_name, c.semester, c.year, c.description,
            u.name as faculty_name
@@ -28,7 +27,6 @@ $stmt = $pdo->prepare("
 $stmt->execute(['student_id1' => $studentId, 'student_id2' => $studentId]);
 $availableCourses = $stmt->fetchAll();
 
-// Get pending requests
 $stmt = $pdo->prepare("
     SELECT cr.request_id, cr.requested_at, cr.status,
            c.course_code, c.course_name, c.semester, c.year,
@@ -42,7 +40,6 @@ $stmt = $pdo->prepare("
 $stmt->execute(['student_id' => $studentId]);
 $pendingRequests = $stmt->fetchAll();
 
-// Get approved/rejected requests (recent 5)
 $stmt = $pdo->prepare("
     SELECT cr.request_id, cr.requested_at, cr.reviewed_at, cr.status, cr.comments,
            c.course_code, c.course_name,

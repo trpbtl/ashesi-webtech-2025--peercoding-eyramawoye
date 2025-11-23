@@ -22,7 +22,6 @@ if (empty($courseId)) {
 try {
     $pdo = getDatabaseConnection();
     
-    // Check if course exists
     $stmt = $pdo->prepare("SELECT course_code, course_name FROM courses WHERE course_id = :course_id");
     $stmt->execute(['course_id' => $courseId]);
     $course = $stmt->fetch();
@@ -31,7 +30,6 @@ try {
         redirect('browse_courses.php', 'Course not found', 'error');
     }
     
-    // Check if already enrolled
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM enrollments WHERE student_id = :student_id AND course_id = :course_id");
     $stmt->execute(['student_id' => $studentId, 'course_id' => $courseId]);
     
@@ -39,7 +37,6 @@ try {
         redirect('browse_courses.php', 'You are already enrolled in this course', 'error');
     }
     
-    // Check if pending request exists
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM course_requests WHERE student_id = :student_id AND course_id = :course_id AND status = 'pending'");
     $stmt->execute(['student_id' => $studentId, 'course_id' => $courseId]);
     
@@ -47,7 +44,6 @@ try {
         redirect('browse_courses.php', 'You already have a pending request for this course', 'error');
     }
     
-    // Create course request
     $stmt = $pdo->prepare("
         INSERT INTO course_requests (student_id, course_id, status, requested_at) 
         VALUES (:student_id, :course_id, 'pending', NOW())
