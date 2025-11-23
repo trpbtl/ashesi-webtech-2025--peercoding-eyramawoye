@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity 04 - Course Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-12">
+                <i class="fas fa-graduation-cap text-6xl text-indigo-600 mb-4"></i>
+                <h1 class="text-5xl font-bold text-gray-800 mb-4">Activity 04</h1>
+                <h2 class="text-2xl text-gray-600 mb-2">Course Management System</h2>
+                <p class="text-gray-500">with Request Approval Workflow</p>
+            </div>
+
+            <!-- Status Badge -->
+            <div class="bg-green-100 border-2 border-green-500 rounded-lg p-6 mb-8 text-center">
+                <i class="fas fa-check-circle text-4xl text-green-600 mb-2"></i>
+                <h3 class="text-2xl font-bold text-green-800">✅ PROJECT COMPLETE</h3>
+                <p class="text-green-700 mt-2">All requirements implemented and tested</p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Application Link -->
+                <a href="individual/index.php" class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-200 transform hover:-translate-y-1">
+                    <div class="flex items-center justify-between mb-4">
+                        <i class="fas fa-rocket text-4xl text-blue-600"></i>
+                        <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">LIVE APP</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Launch Application</h3>
+                    <p class="text-gray-600 text-sm">Access the course management system</p>
+                </a>
+
+                <!-- Documentation Link -->
+                <a href="individual/README.md" class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-200 transform hover:-translate-y-1">
+                    <div class="flex items-center justify-between mb-4">
+                        <i class="fas fa-book text-4xl text-green-600"></i>
+                        <span class="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">DOCS</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Documentation</h3>
+                    <p class="text-gray-600 text-sm">Complete project documentation</p>
+                </a>
+
+                <!-- Quick Start Link -->
+                <a href="individual/QUICK_START.md" class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-200 transform hover:-translate-y-1">
+                    <div class="flex items-center justify-between mb-4">
+                        <i class="fas fa-play-circle text-4xl text-purple-600"></i>
+                        <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-3 py-1 rounded-full">GUIDE</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Quick Start Guide</h3>
+                    <p class="text-gray-600 text-sm">Setup and demo instructions</p>
+                </a>
+
+                <!-- Testing Link -->
+                <a href="individual/TESTING_GUIDE.md" class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition duration-200 transform hover:-translate-y-1">
+                    <div class="flex items-center justify-between mb-4">
+                        <i class="fas fa-check-double text-4xl text-orange-600"></i>
+                        <span class="bg-orange-100 text-orange-800 text-xs font-semibold px-3 py-1 rounded-full">TESTS</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">Testing Guide</h3>
+                    <p class="text-gray-600 text-sm">Comprehensive test cases</p>
+                </a>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                    <i class="fas fa-star text-yellow-500 mr-2"></i>Key Features
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="flex items-start">
+                        <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">User Authentication</h4>
+                            <p class="text-sm text-gray-600">Secure registration and login</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Role-Based Dashboards</h4>
+                            <p class="text-sm text-gray-600">Student and Faculty portals</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Course Management</h4>
+                            <p class="text-sm text-gray-600">Create and manage courses</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Request Approval</h4>
+                            <p class="text-sm text-gray-600">Approve/reject student requests</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Password Security</h4>
+                            <p class="text-sm text-gray-600">Bcrypt hashing</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-check text-green-600 mr-3 mt-1"></i>
+                        <div>
+                            <h4 class="font-semibold text-gray-800">Input Validation</h4>
+                            <p class="text-sm text-gray-600">Client and server-side</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Credentials -->
+            <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-8">
+                <h3 class="text-xl font-bold text-blue-800 mb-4">
+                    <i class="fas fa-key mr-2"></i>Test Credentials
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="font-semibold text-blue-700 mb-2">Student Account:</h4>
+                        <p class="text-sm text-gray-700">
+                            <strong>Email:</strong> john.doe@ashesi.edu.gh<br>
+                            <strong>Password:</strong> Password123!
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-blue-700 mb-2">Faculty Account:</h4>
+                        <p class="text-sm text-gray-700">
+                            <strong>Email:</strong> jane.smith@ashesi.edu.gh<br>
+                            <strong>Password:</strong> Password123!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div class="bg-white rounded-lg shadow p-4 text-center">
+                    <i class="fas fa-file-code text-3xl text-indigo-600 mb-2"></i>
+                    <p class="text-2xl font-bold text-gray-800">19</p>
+                    <p class="text-sm text-gray-600">Files</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4 text-center">
+                    <i class="fas fa-database text-3xl text-green-600 mb-2"></i>
+                    <p class="text-2xl font-bold text-gray-800">4</p>
+                    <p class="text-sm text-gray-600">Tables</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4 text-center">
+                    <i class="fas fa-shield-alt text-3xl text-red-600 mb-2"></i>
+                    <p class="text-2xl font-bold text-gray-800">6+</p>
+                    <p class="text-sm text-gray-600">Security</p>
+                </div>
+                <div class="bg-white rounded-lg shadow p-4 text-center">
+                    <i class="fas fa-users text-3xl text-blue-600 mb-2"></i>
+                    <p class="text-2xl font-bold text-gray-800">2</p>
+                    <p class="text-sm text-gray-600">Roles</p>
+                </div>
+            </div>
+
+            <!-- Technology Stack -->
+            <div class="bg-white rounded-lg shadow-lg p-8 mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                    <i class="fas fa-tools text-indigo-600 mr-2"></i>Technology Stack
+                </h3>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <span class="bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-semibold">
+                        <i class="fab fa-php mr-2"></i>PHP
+                    </span>
+                    <span class="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-semibold">
+                        <i class="fas fa-database mr-2"></i>MySQL
+                    </span>
+                    <span class="bg-orange-100 text-orange-800 px-4 py-2 rounded-full text-sm font-semibold">
+                        <i class="fab fa-html5 mr-2"></i>HTML5
+                    </span>
+                    <span class="bg-cyan-100 text-cyan-800 px-4 py-2 rounded-full text-sm font-semibold">
+                        <i class="fab fa-css3-alt mr-2"></i>Tailwind CSS
+                    </span>
+                    <span class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm font-semibold">
+                        <i class="fab fa-js mr-2"></i>JavaScript
+                    </span>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="text-center text-gray-600">
+                <p class="mb-2">
+                    <i class="fas fa-user-graduate mr-2"></i>
+                    <strong>Student:</strong> Eyram Awoye
+                </p>
+                <p class="mb-2">
+                    <i class="fas fa-university mr-2"></i>
+                    <strong>Institution:</strong> Ashesi University
+                </p>
+                <p class="mb-4">
+                    <i class="fas fa-calendar mr-2"></i>
+                    <strong>Date:</strong> November 2025
+                </p>
+                <p class="text-sm">
+                    © 2025 Course Management System. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
