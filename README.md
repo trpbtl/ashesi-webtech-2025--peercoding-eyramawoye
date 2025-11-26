@@ -91,12 +91,9 @@ This project demonstrates hands-on experience with PHP-MySQL integration, sessio
 
 This schema supports full academic workflow management with referential integrity and optimized indexing.
 
-\\## 🚀 Tech Stack
+\\## Tech Stack
 
-<p align="left">
-  <img src="https://skillicons.dev/icons?i=html,css,js,ts,react,angular,nodejs,nestjs,graphql,mongodb,php,mysql,bootstrap,tailwind,docker,git,vscode,xd,photoshop,webpack,d3" />
-  <img src="https://img.shields.io/badge/Oracle%20APEX-F80000?style=flat-square&logo=oracle&logoColor=white" />
-</p>
+<p align="left"> <img src="https://skillicons.dev/icons?i=html,css,js,php,mysql,tailwind,git,vscode" /> </p>
 
 | Technology | Purpose |
 |-----------|---------|
