@@ -91,12 +91,9 @@ This project demonstrates hands-on experience with PHP-MySQL integration, sessio
 
 This schema supports full academic workflow management with referential integrity and optimized indexing.
 
+\\## Tech Stack
 
-## Tech Stack
-
-<p align="left">
-  <img src="https://skillicons.dev/icons?i=html,css,js,php,mysql,tailwind,git,vscode" />
-</p>
+<p align="left"> <img src="https://skillicons.dev/icons?i=html,css,js,php,mysql,tailwind,git,vscode" /> </p>
 
 | Technology | Purpose |
 |-----------|---------|
